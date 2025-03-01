@@ -11,4 +11,12 @@ export class utilsValidator {
             utilsValidator.isWhiteSpace(text)
         );
     };
+
+    static isUndefined = obj => {
+        return (typeof (obj) === 'undefined');
+    }
+
+    static isNull = obj => {
+        return obj === null;
+    }
 }

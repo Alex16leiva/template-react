@@ -1,4 +1,4 @@
-import React from 'react'
+import PropTypes from "prop-types";
 import { svgIcons } from '../../Icons/iconSvg';
 import { SvgIcon } from '@mui/material';
 
@@ -6,7 +6,7 @@ import { SvgIcon } from '@mui/material';
 export const NavItem = ({
     item,
     onClickItem,
-    isGlobalNavButton,
+    isGlobalNavButton = false,
     activeItem,
     notTitle
 }) => {
@@ -73,7 +73,18 @@ export const NavItem = ({
         </li>
     )
 }
-
-NavItem.defaultProps = {
-    isGlobalNavButton: false
-}
+NavItem.propTypes = {
+    item: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        nameShow: PropTypes.string,
+        svg: PropTypes.shape({
+            data: PropTypes.string,
+        }),
+        iconName: PropTypes.string,
+        newSvg: PropTypes.element,
+    }).isRequired,
+    activeItem: PropTypes.string,
+    isGlobalNavButton: PropTypes.bool,
+    onClickItem: PropTypes.func.isRequired,
+    notTitle: PropTypes.bool
+};

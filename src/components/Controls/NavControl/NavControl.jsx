@@ -1,4 +1,4 @@
-import React from 'react'
+import PropTypes from "prop-types";
 import { NavControlStyled } from './styles'
 import { Desktop, Mobile } from '../../../Helpers/responsive'
 import { NavItem } from './NavItem'
@@ -9,10 +9,10 @@ import { registerCollapse } from '../ReducerControl/controlsSlicer'
 
 export const NavControl = ({
     items,
-    className,
-    showGlobalNav,
+    className = 'navControl',
+    showGlobalNav = true,
     width,
-    useSvgIcon,
+    useSvgIcon = false,
     activeItem,
     onTabChange
 }) => {
@@ -25,7 +25,7 @@ export const NavControl = ({
     }
 
     const changeCollapse = () => {
-        
+
         dispatch(registerCollapse(!isCollapsed))
     }
 
@@ -42,7 +42,7 @@ export const NavControl = ({
             >
                 <Desktop className='HelloMotherfucker'>
                     {showGlobalNav && (
-                        <NavItem 
+                        <NavItem
                             item={{
                                 iconName: 'GlobalNavButton',
                                 name: !isCollapsed ? 'collapse' : 'open'
@@ -56,15 +56,15 @@ export const NavControl = ({
 
                 <Mobile>
                     {showGlobalNav && (
-                        <NavItem 
-                        item={{
-                            iconName: 'GlobalNavButton',
-                            name: !isCollapsed ? 'collapse' : 'open'
-                        }}
-                        onClickItem={changeCollapse}
-                        isGlobalNavButton
-                        useSvgIcon={useSvgIcon}
-                    />
+                        <NavItem
+                            item={{
+                                iconName: 'GlobalNavButton',
+                                name: !isCollapsed ? 'collapse' : 'open'
+                            }}
+                            onClickItem={changeCollapse}
+                            isGlobalNavButton
+                            useSvgIcon={useSvgIcon}
+                        />
                     )}
                 </Mobile>
 
@@ -80,20 +80,20 @@ export const NavControl = ({
                     ))
                 }
                 {isCollapsed &&
-                <div>
-                    {
-                        items.map(item => (
-                            <NavItem
-                                key={item.name}
-                                item={item}
-                                onClickItem={onClickItem}
-                                activeItem={activeItem}
-                                useSvgIcon={useSvgIcon}
-                                notTitle
-                            />
-                        ))
-                    }
-                </div>
+                    <div>
+                        {
+                            items.map(item => (
+                                <NavItem
+                                    key={item.name}
+                                    item={item}
+                                    onClickItem={onClickItem}
+                                    activeItem={activeItem}
+                                    useSvgIcon={useSvgIcon}
+                                    notTitle
+                                />
+                            ))
+                        }
+                    </div>
 
                 }
             </ul>
@@ -101,9 +101,14 @@ export const NavControl = ({
     )
 }
 
-NavControl.defaultProps = {
-    className: 'navControl',
-    isCollapsed: false,
-    showGlobalNav: true,
-    useSvgIcon: false
+NavControl.propTypes = {
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
+    activeItem: PropTypes.string,
+    onClickItem: PropTypes.func,
+    className: PropTypes.string,
+    useSvgIcon: PropTypes.bool,
+    showGlobalNav: PropTypes.bool,
+    width: PropTypes.string,
+    onTabChange: PropTypes.func.isRequired,
 }
+

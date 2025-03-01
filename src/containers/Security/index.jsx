@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { NavControl } from "../../components/Controls/NavControl/NavControl";
 import { MainContentControl } from "../../components/Controls";
-import { UserScreen } from "./UserScreen";
 import { Transaction } from "./Transaction";
 import { Rol } from "./Rol";
-
+import { UserScreen } from "./UserScreen";
 
 const userView = 'userView';
 const rolView = 'rolView';

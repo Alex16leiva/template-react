@@ -1,5 +1,5 @@
-import React from 'react'
-import { ToastContainer } from 'react-toastify'
+
+import { ToastContainer, Bounce } from 'react-toastify'
 import { RouterApp } from "./Routes/RouterApp";
 import 'react-toastify/dist/ReactToastify.css';
 import WaitControlContainer from './components/Controls/WaitControl/WaitControlContainer';
@@ -20,7 +20,7 @@ export const TemplateApp = () => {
                 draggable
                 pauseOnHover
                 theme="dark"
-                transition:Bounce
+                transition={Bounce}
             />
         </div>
     )

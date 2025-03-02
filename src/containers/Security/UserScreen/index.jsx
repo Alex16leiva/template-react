@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { DataGrid, GridActionsCellItem, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import { GridActionsCellItem } from '@mui/x-data-grid';
 import { Container, Title, DataGridContainer } from './UserStyle';
 import { ApiCalls } from '../../../Services/ApiCalls';
 import { utilsValidator } from '../../../Helpers/utils/utilsValidator';
@@ -8,6 +8,7 @@ import { Box, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { AgregarUser } from './AgregarUser';
 import { EditarUser } from './EditarUser';
+import { DataGridControl } from '../../../components/Controls/DataGridControl';
 
 export const UserScreen = () => {
     const [users, setUsers] = useState([]);
@@ -29,12 +30,12 @@ export const UserScreen = () => {
             headerName: 'Fecha Modificación',
             width: 180,
             type: 'dateTime',
-            valueGetter: ({ value }) => value ? new Date(value) : null,
+            valueGetter: (value) => value ? new Date(value) : null,
         },
         {
             field: 'actions',
             type: 'actions',
-            headerName: 'Acciones',
+            headerName: 'Editar',
             width: 100,
             cellClassName: 'actions',
             getActions: ({ id, row }) => [
@@ -107,15 +108,6 @@ export const UserScreen = () => {
         setOpen(false);
     };
 
-    const CustomToolbar = () => (
-        <GridToolbarContainer>
-            <GridToolbarExport
-                printOptions={{ disableToolbarButton: true }}
-                csvOptions={{ fileName: 'customerDataBase', utf8WithBom: true }}
-            />
-        </GridToolbarContainer>
-    );
-
     return (
         <Container>
             <Title>Administración de Usuarios</Title>
@@ -131,24 +123,16 @@ export const UserScreen = () => {
                 <Button variant="contained" onClick={showAddPanel}>Agregar Usuario</Button>
             </Box>
             <DataGridContainer>
-                <DataGrid
+                <DataGridControl
                     rows={users}
                     columns={columns}
-                    checkboxSelection
-                    rowCount={totalItems}
-                    pageSizeOptions={[5, 10, 25]}
-                    onPaginationModelChange={onChangePage}
-                    paginationMode='server'
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize,
-                                page: pageIndex
-                            },
-                        },
-                    }}
-                    components={{ Toolbar: CustomToolbar }}
-                    getRowId={(row) => `${row.usuarioId}-${row.fechaTransaccion}`}
+                    totalItems={totalItems}
+                    onChangePage={onChangePage}
+                    pageSize={pageSize}
+                    pageIndex={pageIndex}
+                    rowId={'usuarioId'}
+                    fileExcelName={'Usuarios'}
+                    pageSizeOptions={[10, 50, 100]}
                 />
             </DataGridContainer>
             <AgregarUser open={open} hideAddPanel={handleHidePanelClick} cargarData={handleSearch} />

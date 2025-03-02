@@ -27,11 +27,11 @@ export const DataGridControl = ({
         <DataGrid
             rows={rows}
             columns={columns}
-            checkboxSelection
             rowCount={totalItems}
             pageSizeOptions={pageSizeOptions}
             onPaginationModelChange={onChangePage}
             paginationMode='server'
+            checkboxSelection
             initialState={{
                 pagination: {
                     paginationModel: {
@@ -40,7 +40,7 @@ export const DataGridControl = ({
                     },
                 },
             }}
-            components={showToolbar ? { Toolbar: CustomToolbar } : {}}
+            slots={showToolbar ? { toolbar: CustomToolbar } : {}}
             getRowId={(row) => row[rowId]}
         />
     )

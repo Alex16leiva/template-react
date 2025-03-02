@@ -20,7 +20,6 @@ export const EditarUser = ({
     });
     const [editarContrasena, setEditarContrasena] = useState(false);
 
-
     useEffect(() => {
         if (usuarioSeleccionado) {
             onResetForm({

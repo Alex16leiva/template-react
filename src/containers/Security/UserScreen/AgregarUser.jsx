@@ -7,14 +7,16 @@ import { useForm } from '../../../hooks/useForm';
 import { ApiCalls } from "../../../Services/ApiCalls";
 import { utilsValidator } from "../../../Helpers/utils/utilsValidator";
 
-export const EdicionUser = ({
+export const AgregarUser = ({
     open,
-    hideAddPanel
+    hideAddPanel,
+    cargarData
 }) => {
     const { usuarioId, nombre, apellido, rolId, contrasena, onInputChange, onResetForm } = useForm({
         usuarioId: '', nombre: '', apellido: '', rolId: '', contrasena: ''
     });
-    const save = async () => {
+
+    const save = () => {
 
         if (utilsValidator.isNullOrEmpty(rolId)) {
             return toast.warn('El rol Id es requerido.')
@@ -29,7 +31,7 @@ export const EdicionUser = ({
         }
 
         var request = {
-            rol: {
+            usuario: {
                 rolId,
                 usuarioId,
                 nombre,
@@ -42,6 +44,7 @@ export const EdicionUser = ({
 
         onResetForm();
         hideAddPanel();
+        cargarData();
     }
 
     const DrawerList = (
@@ -56,18 +59,18 @@ export const EdicionUser = ({
                 <h3>Crear Usuario</h3>
 
                 <TextField
-                    id="input-with-icon-textfield"
+                    id="input-with-icon-textfield-usuario"
                     margin="normal"
                     fullWidth
                     label="User Id"
                     value={usuarioId}
-                    name="userId"
+                    name="usuarioId"
                     onChange={onInputChange}
                     variant="standard"
                 />
 
                 <TextField
-                    id="input-with-icon-textfield"
+                    id="input-with-icon-textfield-nombre"
                     margin="normal"
                     fullWidth
                     label="Nombre"
@@ -77,7 +80,7 @@ export const EdicionUser = ({
                     variant="standard"
                 />
                 <TextField
-                    id="input-with-icon-textfield"
+                    id="input-with-icon-textfield-apellido"
                     margin="normal"
                     fullWidth
                     label="Apellido"
@@ -87,7 +90,7 @@ export const EdicionUser = ({
                     variant="standard"
                 />
                 <TextField
-                    id="input-with-icon-textfield"
+                    id="input-with-icon-textfield-contrasena"
                     margin="normal"
                     fullWidth
                     label="Contraseña"
@@ -97,7 +100,7 @@ export const EdicionUser = ({
                     variant="standard"
                 />
                 <TextField
-                    id="input-with-icon-textfield"
+                    id="input-with-icon-textfield-rolId"
                     margin="normal"
                     fullWidth
                     label="Rol Id"
@@ -110,7 +113,7 @@ export const EdicionUser = ({
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Tooltip title='Return'>
-                    <Fab color="primary" aria-label="add" type="button" onClick={() => hideAddPanel}>
+                    <Fab color="primary" aria-label="add" onClick={hideAddPanel}>
                         <KeyboardReturnIcon />
                     </Fab>
                 </Tooltip>
@@ -135,7 +138,8 @@ export const EdicionUser = ({
     )
 }
 
-EdicionUser.propTypes = {
+AgregarUser.propTypes = {
     open: PropTypes.bool.isRequired,
     hideAddPanel: PropTypes.func.isRequired,
+    cargarData: PropTypes.func.isRequired
 };

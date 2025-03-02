@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useForm } from "../../hooks/useForm";
 import { login } from "../Login/loginSlicer";
-import { TextField, Button, Container, Typography, Box, Dialog, } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, } from '@mui/material';
 import { toast } from "react-toastify";
 import { ApiCalls } from "../../Services/ApiCalls";
 
@@ -25,9 +25,9 @@ export const LoginPage = () => {
         }
         sessionStorage.access_token = response.token;
         const requestUserInfo = {
-          userName: userName,
+          usuarioId: userName,
         }
-        sessionStorage.userName = userName;
+        sessionStorage.usuarioId = userName;
         sessionStorage.requestUserInfo = JSON.stringify(requestUserInfo);
         dispatch(login(userName));
         navigate(lastPath, { replace: true });

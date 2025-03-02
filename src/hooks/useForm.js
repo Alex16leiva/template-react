@@ -8,9 +8,12 @@ export const useForm = (initialForm = {}) => {
         setFormState({ ...formState, [e.target.name]: e.target.value });
     };
 
-    const onResetForm = () => {
-        setFormState(initialForm);
+    const onResetForm = (newValues = initialForm) => {
+        setFormState(newValues);
     };
+
+
+
 
     return {
         ...formState,

@@ -6,7 +6,8 @@ import { utilsValidator } from '../../../Helpers/utils/utilsValidator';
 import { SearchControl } from '../../../components/Controls/SearchControl';
 import { Box, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { EdicionUser } from './EdicionUser';
+import { AgregarUser } from './AgregarUser';
+import { EditarUser } from './EditarUser';
 
 export const UserScreen = () => {
     const [users, setUsers] = useState([]);
@@ -15,6 +16,8 @@ export const UserScreen = () => {
     const [pageSize, setPageSize] = useState(10);
     const [pageIndex, setPageIndex] = useState(0);
     const [open, setOpen] = useState(false);
+    const [userSelected, setUserSelected] = useState({});
+    const [openEdit, setOpenEdit] = useState(false);
 
     const columns = [
         { field: 'usuarioId', headerName: 'Usuario Id', width: 150 },
@@ -23,49 +26,51 @@ export const UserScreen = () => {
         { field: 'rolId', headerName: 'Rol Id', width: 200 },
         {
             field: 'fechaTransaccion',
-            headerName: 'Date Modifier',
+            headerName: 'Fecha Modificación',
             width: 180,
             type: 'dateTime',
-            valueGetter: (value) => value ? new Date(value) : null,
+            valueGetter: ({ value }) => value ? new Date(value) : null,
         },
         {
             field: 'actions',
             type: 'actions',
-            headerName: 'Actions',
+            headerName: 'Acciones',
             width: 100,
             cellClassName: 'actions',
-            getActions: ({ id }) => [
+            getActions: ({ id, row }) => [
                 <GridActionsCellItem
                     key={id}
                     icon={<EditIcon />}
-                    label="Edit"
+                    label="Editar"
                     className="textPrimary"
-                    onClick={() => handleEditClick(id)}
+                    onClick={() => handleEditClick(row)}
                     color="inherit"
                 />
             ]
         }
     ];
 
-    const fetchUsers = useCallback((pageIndex, pageSize) => {
+    const fetchUsers = useCallback(async (pageIndex, pageSize) => {
         const request = {
             queryInfo: {
                 pageIndex,
                 pageSize,
                 sortFields: ['FechaTransaccion'],
                 ascending: false,
-                predicate: !utilsValidator.isNullOrEmpty(searchValue) ? 'usuarioId.Contains(@0)' : '',
-                paramValues: !utilsValidator.isNullOrEmpty(searchValue) ? [searchValue] : [],
+                predicate: utilsValidator.isNullOrEmpty(searchValue) ? '' : 'usuarioId.Contains(@0)',
+                paramValues: utilsValidator.isNullOrEmpty(searchValue) ? [] : [searchValue],
             }
         };
 
-        ApiCalls.httpPost('user/obtener-usuarios', request)
-            .then(response => {
-                if (response) {
-                    setTotalItems(response.totalItems);
-                    setUsers(response.items);
-                }
-            });
+        try {
+            const response = await ApiCalls.httpPost('user/obtener-usuarios', request);
+            if (response) {
+                setTotalItems(response.totalItems);
+                setUsers(response.items);
+            }
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
     }, [searchValue]);
 
     useEffect(() => {
@@ -88,22 +93,17 @@ export const UserScreen = () => {
         fetchUsers(pageInfo.page, pageInfo.pageSize);
     };
 
-    const handleEditClick = (id) => {
-        console.log(id);
-
-        // Logic to handle editing can be added here
-        setOpen(true);
+    const handleEditClick = (row) => {
+        setUserSelected(row);
+        setOpenEdit(true);
     };
 
     const showAddPanel = () => {
-        console.log('click');
-
         setOpen(true);
     };
 
     const handleHidePanelClick = () => {
-        console.log('Hiciste click en el botón de cerrar');
-
+        setOpenEdit(false);
         setOpen(false);
     };
 
@@ -119,7 +119,7 @@ export const UserScreen = () => {
     return (
         <Container>
             <Title>Administración de Usuarios</Title>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                 <SearchControl
                     width={250}
                     textSearch='Buscar Usuario'
@@ -128,9 +128,7 @@ export const UserScreen = () => {
                     onKeyDown={handleKeyPress}
                     value={searchValue}
                 />
-                <Box sx={{ alignContent: 'center' }}>
-                    <Button variant="contained" onClick={() => showAddPanel}>Add user</Button>
-                </Box>
+                <Button variant="contained" onClick={showAddPanel}>Agregar Usuario</Button>
             </Box>
             <DataGridContainer>
                 <DataGrid
@@ -149,11 +147,12 @@ export const UserScreen = () => {
                             },
                         },
                     }}
-                    slots={{ toolbar: CustomToolbar }}
+                    components={{ Toolbar: CustomToolbar }}
                     getRowId={(row) => `${row.usuarioId}-${row.fechaTransaccion}`}
                 />
             </DataGridContainer>
-            <EdicionUser open={open} hideAddPanel={() => handleHidePanelClick} />
+            <AgregarUser open={open} hideAddPanel={handleHidePanelClick} cargarData={handleSearch} />
+            <EditarUser open={openEdit} hideEditPanel={handleHidePanelClick} cargarData={handleSearch} usuarioSeleccionado={userSelected} />
         </Container>
     );
 };

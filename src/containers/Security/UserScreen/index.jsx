@@ -12,8 +12,8 @@ import { DataGridControl } from '../../../components/Controls/DataGridControl';
 
 export const UserScreen = () => {
     const [users, setUsers] = useState([]);
-    const [totalItems, setTotalItems] = useState(0);
     const [searchValue, setSearchValue] = useState('');
+    const [totalItems, setTotalItems] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [pageIndex, setPageIndex] = useState(0);
     const [open, setOpen] = useState(false);
@@ -116,6 +116,7 @@ export const UserScreen = () => {
                     width={250}
                     textSearch='Buscar Usuario'
                     onBlur={handleSearch}
+                    onClick={handleSearch}
                     onChange={(event) => setSearchValue(event.target.value)}
                     onKeyDown={handleKeyPress}
                     value={searchValue}
@@ -124,13 +125,13 @@ export const UserScreen = () => {
             </Box>
             <DataGridContainer>
                 <DataGridControl
+                    rowId={'usuarioId'}
                     rows={users}
                     columns={columns}
-                    totalItems={totalItems}
                     onChangePage={onChangePage}
+                    totalItems={totalItems}
                     pageSize={pageSize}
                     pageIndex={pageIndex}
-                    rowId={'usuarioId'}
                     fileExcelName={'Usuarios'}
                     pageSizeOptions={[10, 50, 100]}
                 />

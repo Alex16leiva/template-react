@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { DataGrid, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid"
+import { DataGrid, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
 
 export const DataGridControl = ({
     rows,
@@ -11,7 +11,9 @@ export const DataGridControl = ({
     rowId,
     showToolbar = true,
     fileExcelName,
-    pageSizeOptions
+    pageSizeOptions,
+    handleRowDoubleClick,
+    handleRowSelectionChange
 }) => {
 
     const CustomToolbar = () => (
@@ -36,15 +38,17 @@ export const DataGridControl = ({
                 pagination: {
                     paginationModel: {
                         pageSize,
-                        page: pageIndex
+                        page: pageIndex,
                     },
                 },
             }}
             slots={showToolbar ? { toolbar: CustomToolbar } : {}}
             getRowId={(row) => row[rowId]}
+            onRowDoubleClick={handleRowDoubleClick}
+            onRowSelectionModelChange={handleRowSelectionChange}
         />
-    )
-}
+    );
+};
 
 DataGridControl.propTypes = {
     rows: PropTypes.array.isRequired,
@@ -56,5 +60,7 @@ DataGridControl.propTypes = {
     onChangePage: PropTypes.func.isRequired,
     showToolbar: PropTypes.bool,
     fileExcelName: PropTypes.string,
-    pageSizeOptions: PropTypes.array
-}
+    pageSizeOptions: PropTypes.array,
+    handleRowSelectionChange: PropTypes.func,
+    handleRowDoubleClick: PropTypes.func,
+};

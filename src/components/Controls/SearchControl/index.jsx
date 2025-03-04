@@ -8,7 +8,8 @@ export const SearchControl = ({
     onBlur,
     onChange,
     onKeyDown,
-    value
+    value,
+    onClick
 }) => {
     return (
         <FormControl sx={{ width: `${width}px` }} variant="outlined">
@@ -20,7 +21,7 @@ export const SearchControl = ({
                     <InputAdornment position="end">
                         <IconButton
                             aria-label="toggle password visibility"
-                            onClick={onBlur}
+                            onClick={onClick}
                             edge="end"
                         >
                             <GridSearchIcon />
@@ -39,10 +40,11 @@ export const SearchControl = ({
 }
 
 SearchControl.propTypes = {
-    width: PropTypes.number.isRequired,
+    width: PropTypes.number,
     textSearch: PropTypes.string,
     onBlur: PropTypes.func,
     onChange: PropTypes.func,
     onKeyDown: PropTypes.func,
+    onClick: PropTypes.func,
     value: PropTypes.string.isRequired
 };

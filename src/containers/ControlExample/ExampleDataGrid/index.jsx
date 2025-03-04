@@ -1,5 +1,4 @@
 import { DataGrid, GridActionsCellItem, GridRowEditStopReasons, GridRowModes, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid'
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
@@ -122,10 +121,10 @@ export const ExampleDataGrid = () => {
             cellClassName: 'actions',
             getActions: ({ id }) => {
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem
+                            key={id}
                             icon={<SaveIcon />}
                             label="Save"
                             sx={{
@@ -134,6 +133,7 @@ export const ExampleDataGrid = () => {
                             onClick={handleSaveClick(id)}
                         />,
                         <GridActionsCellItem
+                            key={id}
                             icon={<CancelIcon />}
                             label="Cancel"
                             className="textPrimary"
@@ -145,6 +145,7 @@ export const ExampleDataGrid = () => {
 
                 return [
                     <GridActionsCellItem
+                        key={id}
                         icon={<EditIcon />}
                         label="Edit"
                         className="textPrimary"
@@ -152,6 +153,7 @@ export const ExampleDataGrid = () => {
                         color="inherit"
                     />,
                     <GridActionsCellItem
+                        key={id}
                         icon={<DeleteIcon />}
                         label="Delete"
                         onClick={handleDeleteClick(id)}
